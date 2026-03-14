@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NestAds 시뮬레이터 - PRO</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" as="style"
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="./styles.css?v=new1">
+</head>
+
+<body>
+  <div class="page-shell">
+    <header class="master-header glass">
+      <div class="header-left">
+        <div class="hero-copy">
+          <p class="eyebrow">NestAds Rendering Lab</p>
+          <h1>고정, FLUID, FILL 시뮬레이터</h1>
+          <p class="hero-description">
+            디바이스 해상도에 맞춰 프레임과 이미지가 각 모드에서 어떻게 배치되고 잘리는지 실시간으로 확인하세요.
+          </p>
+        </div>
+
+        <div class="mode-rules-list">
+          <div class="rule-item">
+            <div class="mode-title-row">
+              <span class="mode-pill fixed">고정 (FIXED)</span>
+            </div>
+            <p>비율 유지 축소. 여백 발생.</p>
+          </div>
+          <div class="rule-item">
+            <div class="mode-title-row">
+              <span class="mode-pill fluid">FLUID</span>
+            </div>
+            <p>가로 100% 채움. 세로 비례 재계산.</p>
+          </div>
+          <div class="rule-item">
+            <div class="mode-title-row">
+              <span class="mode-pill fill">FILL</span>
+            </div>
+            <p>빈틈없이 확대. 상하/좌우 Crop.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-right config-panel">
+        <section class="panel-block config-block">
+          <div class="panel-heading center-heading">
+            <h2 class="compact-h2">시뮬레이션 해상도 및 영역 제어</h2>
+          </div>
+
+          <div class="preset-select-toolbar">
+            <label class="preset-select-field">
+              <span>비교 기기 해상도</span>
+              <select id="device-select" aria-label="기기 해상도">
+                <option value="galaxy-s24" selected>Galaxy S24 (360 x 780)</option>
+                <option value="galaxy-z-fold-cover">Z Fold 커버 (344 x 882)</option>
+                <option value="galaxy-z-fold-inner">Z Fold 메인 (844 x 1138)</option>
+                <option value="galaxy-z-flip">Galaxy Z Flip (426 x 1011)</option>
+                <option value="iphone-se">iPhone SE (375 x 667)</option>
+                <option value="iphone-pro">iPhone 15/16 Pro (393 x 852)</option>
+                <option value="android-large">Galaxy Ultra (412 x 915)</option>
+                <option value="iphone-max">iPhone Pro Max (430 x 932)</option>
+              </select>
+            </label>
+            <label class="preset-select-field">
+              <span>부모 프레임 레이아웃</span>
+              <select id="parent-preset-select" aria-label="부모 프리셋">
+                <option value="custom">직접 입력</option>
+                <option value="300x250">300 x 250</option>
+                <option value="320x180">320 x 180</option>
+                <option value="360x240">360 x 240</option>
+              </select>
+            </label>
+            <label class="preset-select-field">
+              <span>이미지 원본 사이즈</span>
+              <select id="image-preset-select" aria-label="이미지 프리셋">
+                <option value="custom">직접 입력</option>
+                <option value="1200x628">1200 x 628</option>
+                <option value="1080x1350">1080 x 1350</option>
+                <option value="1080x1080">1080 x 1080</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="field-grid">
+            <label class="field">
+              <span>부모 폭 (px)</span>
+              <input id="parent-width" type="number" min="1" value="320">
+            </label>
+            <label class="field">
+              <span>부모 높이 (px)</span>
+              <input id="parent-height" type="number" min="1" value="180">
+            </label>
+            <label class="field">
+              <span>이미지 폭 (px)</span>
+              <input id="image-width" type="number" min="1" value="1200">
+            </label>
+            <label class="field">
+              <span>이미지 높이 (px)</span>
+              <input id="image-height" type="number" min="1" value="628">
+            </label>
+          </div>
+        </section>
+      </div>
+    </header>
+
+    <main class="content-grid">
+      <section class="results-panel glass">
+        <div class="results-header">
+          <div>
+            <h2 id="selected-device-name">Galaxy S24</h2>
+          </div>
+          <div class="selected-device-meta">
+            <p id="selected-device-size" class="selected-device-size">360 x 780</p>
+            <p id="selected-device-ratio" class="selected-device-ratio">기기 비율 1:2.17</p>
+          </div>
+        </div>
+
+        <div class="summary-strip">
+          <article class="summary-card">
+            <span>Target Viewport</span>
+            <strong id="summary-device">Galaxy S24</strong>
+          </article>
+          <article class="summary-card">
+            <span>Container Bounds</span>
+            <strong id="summary-parent">320 x 180</strong>
+          </article>
+          <article class="summary-card">
+            <span>Image Source</span>
+            <strong id="summary-image">1200 x 628</strong>
+            <p id="summary-aspect">Ratio 1.91:1</p>
+          </article>
+        </div>
+
+        <p id="selected-device-note" class="results-note">
+          선택한 해상도를 기준으로 시뮬레이션 된 결과입니다.
+        </p>
+
+        <div id="mode-grid" class="mode-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <template id="mode-template">
+    <section class="mode-card">
+      <div class="mode-topline">
+        <span class="mode-pill"></span>
+        <span class="mode-metric"></span>
+      </div>
+
+      <div class="mode-highlight">
+        <span>변화 요약</span>
+        <strong class="mode-highlight-value"></strong>
+      </div>
+
+      <div class="phone-preview-shell">
+        <div class="phone-preview">
+          <div class="phone-screen">
+            <div class="placement-layer">
+              <div class="image-layer">
+                <span class="image-label">IMAGE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <dl class="metrics-list">
+        <div>
+          <dt>최종 시뮬레이션 부모 영역</dt>
+          <dd class="metric-parent"></dd>
+        </div>
+        <div>
+          <dt>실제 표출되는 이미지</dt>
+          <dd class="metric-image"></dd>
+        </div>
+      </dl>
+
+      <p class="mode-description"></p>
+    </section>
+  </template>
+
+  <script src="./script.js?v=compact4"></script>
+</body>
+
+</html>
