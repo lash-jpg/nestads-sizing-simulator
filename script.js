@@ -36,14 +36,7 @@ let modeTemplate;
 let parentPresetSelect;
 let imagePresetSelect;
 
-let selectedDeviceName;
-let selectedDeviceSize;
-let selectedDeviceRatio;
 let selectedDeviceNote;
-let summaryDevice;
-let summaryParent;
-let summaryImage;
-let summaryAspect;
 
 const state = {
   deviceId: DEVICES[0].id
@@ -63,14 +56,7 @@ function cacheDom() {
   parentPresetSelect = document.querySelector("#parent-preset-select");
   imagePresetSelect = document.querySelector("#image-preset-select");
 
-  selectedDeviceName = document.querySelector("#selected-device-name");
-  selectedDeviceSize = document.querySelector("#selected-device-size");
-  selectedDeviceRatio = document.querySelector("#selected-device-ratio");
   selectedDeviceNote = document.querySelector("#selected-device-note");
-  summaryDevice = document.querySelector("#summary-device");
-  summaryParent = document.querySelector("#summary-parent");
-  summaryImage = document.querySelector("#summary-image");
-  summaryAspect = document.querySelector("#summary-aspect");
 }
 
 function round(value) {
@@ -161,7 +147,8 @@ function calculateMode(mode, device, inputParent, image) {
   }
 
   if (mode === "fluid") {
-    const requestedWidth = Math.min(inputParent.width, device.width);
+    const containerBoundWidth = Math.min(inputParent.width, device.width);
+    const requestedWidth = Math.min(containerBoundWidth, image.width);
     const requestedHeight = round(requestedWidth * (image.height / image.width));
     const parent = constrainSizeToDevice(requestedWidth, requestedHeight, device);
 
@@ -175,7 +162,8 @@ function calculateMode(mode, device, inputParent, image) {
         width: requestedWidth,
         height: requestedHeight
       },
-      parentClamped: requestedWidth !== inputParent.width,
+      parentClamped: containerBoundWidth !== inputParent.width,
+      originalBounded: requestedWidth !== containerBoundWidth,
       deviceBounded: parent.width !== requestedWidth || parent.height !== requestedHeight
     };
   }
@@ -215,7 +203,9 @@ function analyzeEffect(mode, metrics, inputParent) {
   if (mode === "fluid") {
     const effects = [`부모 높이 ${inputParent.height}px는 고정값 아님`];
 
-    if (metrics.deviceBounded) {
+    if (metrics.originalBounded) {
+      effects.push(`부모 폭이 더 넓어도 원본 폭 ${metrics.parent.width}px 유지`);
+    } else if (metrics.deviceBounded) {
       effects.push(`기기 한도에 맞춰 ${formatSize(metrics.parent.width, metrics.parent.height)}로 축소`);
     } else {
       effects.push("세로 자동 재계산");
@@ -258,6 +248,9 @@ function getPrimaryEffect(mode, metrics, inputParent) {
   }
 
   if (mode === "fluid") {
+    if (metrics.originalBounded) {
+      return `원본 폭 ${metrics.parent.width}px 유지`;
+    }
     if (metrics.deviceBounded) {
       return `기기 한도에 맞춰 ${formatSize(metrics.parent.width, metrics.parent.height)}`;
     }
@@ -300,7 +293,9 @@ function describeFluid(metrics, inputParent) {
   let text = `가로는 부모 폭 ${metrics.parent.width}px를 모두 사용하고 세로는 이미지 비율로 ${metrics.parent.height}px가 다시 계산됩니다.`;
   text += ` 입력한 부모 높이 ${inputParent.height}px는 레이아웃 고정값으로 직접 쓰이지 않습니다.`;
 
-  if (metrics.deviceBounded) {
+  if (metrics.originalBounded) {
+    text += ` 다만 FLUID 정책상 부모 폭이 소재 원본 폭보다 크면 확대하지 않고 원본 크기 ${formatSize(metrics.parent.width, metrics.parent.height)}로 표시합니다.`;
+  } else if (metrics.deviceBounded) {
     text += ` Android SDK 기준으로는 1차 계산값 ${formatSize(metrics.requested.width, metrics.requested.height)}가 기기 한도를 넘으면`;
     text += ` 최종적으로 ${formatSize(metrics.parent.width, metrics.parent.height)}까지 다시 축소됩니다.`;
   }
@@ -331,7 +326,7 @@ function buildSelectedDeviceNote(device, inputParent, image) {
   const fluid = calculateMode("fluid", device, inputParent, image);
   const fill = calculateMode("fill", device, inputParent, image);
 
-  return `${device.name} 해상도(${formatSize(device.width, device.height)}) 기준 시뮬레이션입니다. 고정(FIXED)은 ${getPrimaryEffect("fixed", fixed, inputParent)}, FLUID는 ${getPrimaryEffect("fluid", fluid, inputParent)}, FILL은 ${getPrimaryEffect("fill", fill, inputParent)} 상태로 렌더링 됩니다.`;
+  return `${device.name} 해상도(${formatSize(device.width, device.height)}), 부모 ${formatSize(inputParent.width, inputParent.height)}, 이미지 원본 ${formatSize(image.width, image.height)} 기준 시뮬레이션입니다. 고정(FIXED)은 ${getPrimaryEffect("fixed", fixed, inputParent)}, FLUID는 ${getPrimaryEffect("fluid", fluid, inputParent)}, FILL은 ${getPrimaryEffect("fill", fill, inputParent)} 상태로 렌더링 됩니다.`;
 }
 
 function getSelectedDevice() {
@@ -479,14 +474,9 @@ function render() {
     height: safeValue(inputs.imageHeight, 628)
   };
 
-  selectedDeviceName.textContent = device.name;
-  selectedDeviceSize.textContent = `${formatSize(device.width, device.height)}`;
-  selectedDeviceRatio.textContent = `Target Ratio ${formatAspect(device.width, device.height)}`;
-  summaryDevice.textContent = device.name;
-  summaryParent.textContent = formatSize(inputParent.width, inputParent.height);
-  summaryImage.textContent = formatSize(image.width, image.height);
-  summaryAspect.textContent = `Ratio ${formatAspect(image.width, image.height)}`;
-  selectedDeviceNote.textContent = buildSelectedDeviceNote(device, inputParent, image);
+  if (selectedDeviceNote) {
+    selectedDeviceNote.textContent = buildSelectedDeviceNote(device, inputParent, image);
+  }
   updatePresetSelects(inputParent, image);
 
   modeGrid.innerHTML = "";

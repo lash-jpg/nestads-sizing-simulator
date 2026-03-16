@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" as="style"
     href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-  <link rel="stylesheet" href="./styles.css?v=new2">
+  <link rel="stylesheet" href="./styles.css?v=new5">
 </head>
 
 <body>
@@ -25,27 +25,36 @@
 
         <div class="mode-rules-list">
           <div class="rule-item">
-            <div class="mode-title-row">
-              <span class="mode-pill fixed">고정 (FIXED)</span>
+            <div class="rule-mode-cell">
+              <div class="mode-title-row">
+                <span class="mode-pill fixed">고정 (FIXED)</span>
+              </div>
             </div>
-            <p>비율 유지 축소. 여백 발생.</p>
+            <p class="rule-summary">입력한 부모 영역을 유지한 채 이미지를 contain 방식으로 맞춥니다.</p>
           </div>
           <div class="rule-item">
-            <div class="mode-title-row">
-              <span class="mode-pill fluid">FLUID</span>
+            <div class="rule-mode-cell">
+              <div class="mode-title-row">
+                <span class="mode-pill fluid">FLUID</span>
+              </div>
             </div>
-            <p>가로 우선 채움. 필요 시 기기 한도에 맞춰 축소.</p>
+            <p class="rule-summary">가로 폭을 우선 채우고 세로는 이미지 비율로 다시 계산합니다.</p>
           </div>
           <div class="rule-item">
-            <div class="mode-title-row">
-              <span class="mode-pill fill">FILL</span>
+            <div class="rule-mode-cell">
+              <div class="mode-title-row">
+                <span class="mode-pill fill">FILL</span>
+              </div>
             </div>
-            <p>빈틈없이 확대. 상하/좌우 Crop.</p>
+            <p class="rule-summary">부모 영역을 빈틈없이 채우기 위해 이미지를 cover 방식으로 키웁니다.</p>
           </div>
         </div>
       </div>
 
-      <div class="header-right config-panel">
+    </header>
+
+    <main class="content-grid">
+      <section class="results-panel glass">
         <section class="panel-block config-block">
           <div class="panel-heading center-heading">
             <h2 class="compact-h2">시뮬레이션 해상도 및 영역 제어</h2>
@@ -104,36 +113,6 @@
             </label>
           </div>
         </section>
-      </div>
-    </header>
-
-    <main class="content-grid">
-      <section class="results-panel glass">
-        <div class="results-header">
-          <div>
-            <h2 id="selected-device-name">Galaxy S24</h2>
-          </div>
-          <div class="selected-device-meta">
-            <p id="selected-device-size" class="selected-device-size">360 x 780</p>
-            <p id="selected-device-ratio" class="selected-device-ratio">기기 비율 1:2.17</p>
-          </div>
-        </div>
-
-        <div class="summary-strip">
-          <article class="summary-card">
-            <span>Target Viewport</span>
-            <strong id="summary-device">Galaxy S24</strong>
-          </article>
-          <article class="summary-card">
-            <span>Container Bounds</span>
-            <strong id="summary-parent">320 x 180</strong>
-          </article>
-          <article class="summary-card">
-            <span>Image Source</span>
-            <strong id="summary-image">1200 x 628</strong>
-            <p id="summary-aspect">Ratio 1.91:1</p>
-          </article>
-        </div>
 
         <p id="selected-device-note" class="results-note">
           선택한 해상도를 기준으로 시뮬레이션 된 결과입니다.
