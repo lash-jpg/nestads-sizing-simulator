@@ -633,8 +633,9 @@ body::after {
 
 .image-label {
   position: absolute;
-  left: var(--label-offset-x, 8px);
-  bottom: var(--label-offset-y, 8px);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   color: #fff;
@@ -643,8 +644,10 @@ body::after {
   font-size: var(--label-font-size, 10px);
   font-weight: 700;
   letter-spacing: 0.1em;
-  z-index: 2;
+  z-index: 3;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+  white-space: nowrap;
 }
 
 .metrics-list {

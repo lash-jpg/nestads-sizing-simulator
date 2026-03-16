@@ -117,6 +117,33 @@ function cover(parent, image) {
   };
 }
 
+function constrainSizeToDevice(width, height, device) {
+  let constrainedWidth = width;
+  let constrainedHeight = height;
+
+  if (constrainedWidth > constrainedHeight && constrainedWidth > device.width) {
+    const ratio = constrainedHeight / constrainedWidth;
+    constrainedWidth = device.width;
+    constrainedHeight = Math.min(device.height, round(constrainedWidth * ratio));
+  } else if (constrainedHeight > constrainedWidth && constrainedHeight > device.height) {
+    const ratio = constrainedWidth / constrainedHeight;
+    constrainedHeight = device.height;
+    constrainedWidth = Math.min(device.width, round(constrainedHeight * ratio));
+  } else if (
+    constrainedWidth === constrainedHeight &&
+    (constrainedWidth > device.width || constrainedHeight > device.height)
+  ) {
+    const minEdge = Math.min(device.width, device.height);
+    constrainedWidth = minEdge;
+    constrainedHeight = minEdge;
+  }
+
+  return {
+    width: constrainedWidth,
+    height: constrainedHeight
+  };
+}
+
 function calculateMode(mode, device, inputParent, image) {
   if (mode === "fixed") {
     const parent = clampParent(inputParent, device);
@@ -134,20 +161,22 @@ function calculateMode(mode, device, inputParent, image) {
   }
 
   if (mode === "fluid") {
-    const parentWidth = Math.min(inputParent.width, device.width);
-    const parentHeight = round(parentWidth * (image.height / image.width));
+    const requestedWidth = Math.min(inputParent.width, device.width);
+    const requestedHeight = round(requestedWidth * (image.height / image.width));
+    const parent = constrainSizeToDevice(requestedWidth, requestedHeight, device);
 
     return {
-      parent: {
-        width: parentWidth,
-        height: parentHeight
-      },
+      parent,
       image: {
-        width: parentWidth,
-        height: parentHeight
+        width: parent.width,
+        height: parent.height
       },
-      overflowY: Math.max(0, parentHeight - device.height),
-      parentClamped: parentWidth !== inputParent.width
+      requested: {
+        width: requestedWidth,
+        height: requestedHeight
+      },
+      parentClamped: requestedWidth !== inputParent.width,
+      deviceBounded: parent.width !== requestedWidth || parent.height !== requestedHeight
     };
   }
 
@@ -168,7 +197,7 @@ function analyzeEffect(mode, metrics, inputParent) {
     const effects = [];
 
     if (metrics.parentClamped) {
-      effects.push("기기 폭에 맞춰 부모 축소");
+      effects.push("기기 한도에 맞춰 부모 축소");
     }
     if (metrics.marginX > 0) {
       effects.push(`좌우 여백 ${round(metrics.marginX / 2)}px`);
@@ -186,8 +215,8 @@ function analyzeEffect(mode, metrics, inputParent) {
   if (mode === "fluid") {
     const effects = [`부모 높이 ${inputParent.height}px는 고정값 아님`];
 
-    if (metrics.overflowY > 0) {
-      effects.push(`세로 ${metrics.overflowY}px overflow`);
+    if (metrics.deviceBounded) {
+      effects.push(`기기 한도에 맞춰 ${formatSize(metrics.parent.width, metrics.parent.height)}로 축소`);
     } else {
       effects.push("세로 자동 재계산");
     }
@@ -204,7 +233,7 @@ function analyzeEffect(mode, metrics, inputParent) {
     effects.push(`상하 crop ${round(metrics.cropY / 2)}px`);
   }
   if (metrics.parentClamped) {
-    effects.push("기기 폭에 맞춰 부모 축소");
+    effects.push("기기 한도에 맞춰 부모 축소");
   }
   if (effects.length === 0) {
     effects.push("crop 없이 꽉 채움");
@@ -222,15 +251,15 @@ function getPrimaryEffect(mode, metrics, inputParent) {
       return `좌우 여백 ${round(metrics.marginX / 2)}px`;
     }
     if (metrics.parentClamped) {
-      return "기기 폭에 맞춰 축소";
+      return "기기 한도에 맞춰 축소";
     }
 
     return "비율 유지로 딱 맞춤";
   }
 
   if (mode === "fluid") {
-    if (metrics.overflowY > 0) {
-      return `세로 ${metrics.overflowY}px overflow`;
+    if (metrics.deviceBounded) {
+      return `기기 한도에 맞춰 ${formatSize(metrics.parent.width, metrics.parent.height)}`;
     }
 
     return `세로 ${metrics.parent.height}px로 재계산`;
@@ -243,7 +272,7 @@ function getPrimaryEffect(mode, metrics, inputParent) {
     return `상하 crop ${round(metrics.cropY / 2)}px`;
   }
   if (metrics.parentClamped) {
-    return "기기 폭에 맞춰 축소";
+    return "기기 한도에 맞춰 축소";
   }
 
   return "crop 없이 꽉 채움";
@@ -271,8 +300,9 @@ function describeFluid(metrics, inputParent) {
   let text = `가로는 부모 폭 ${metrics.parent.width}px를 모두 사용하고 세로는 이미지 비율로 ${metrics.parent.height}px가 다시 계산됩니다.`;
   text += ` 입력한 부모 높이 ${inputParent.height}px는 레이아웃 고정값으로 직접 쓰이지 않습니다.`;
 
-  if (metrics.overflowY > 0) {
-    text += ` 이 기기에서는 계산된 높이가 화면보다 ${metrics.overflowY}px 커서 아래로 넘칠 수 있습니다.`;
+  if (metrics.deviceBounded) {
+    text += ` Android SDK 기준으로는 1차 계산값 ${formatSize(metrics.requested.width, metrics.requested.height)}가 기기 한도를 넘으면`;
+    text += ` 최종적으로 ${formatSize(metrics.parent.width, metrics.parent.height)}까지 다시 축소됩니다.`;
   }
 
   return text;
