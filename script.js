@@ -381,8 +381,11 @@ function buildModeCard(mode, device, inputParent, image) {
   const labelPadX = Math.max(5, round(8 * scaleBase));
   const labelPadY = Math.max(3, round(5 * scaleBase));
 
-  phoneScreen.style.width = `${previewWidth}px`;
-  phoneScreen.style.height = `${previewHeight}px`;
+  const frameWidth = previewWidth + borderWidth * 2;
+  const frameHeight = previewHeight + borderWidth * 2;
+
+  phoneScreen.style.width = `${frameWidth}px`;
+  phoneScreen.style.height = `${frameHeight}px`;
   phoneScreen.style.setProperty("--phone-border", `${borderWidth}px`);
   phoneScreen.style.setProperty("--phone-radius", `${phoneRadius}px`);
   phoneScreen.style.setProperty("--placement-radius", `${placementRadius}px`);
