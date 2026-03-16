@@ -1,6 +1,8 @@
 const DEVICES = [
   { id: "galaxy-s24", label: "Android Compact", name: "Galaxy S24 계열", width: 360, height: 780 },
   { id: "galaxy-z-fold-cover", label: "Fold Cover", name: "Galaxy Z Fold 커버", width: 344, height: 882 },
+  { id: "galaxy-z-fold-inner", label: "Fold Main", name: "Galaxy Z Fold 메인", width: 844, height: 1138 },
+  { id: "galaxy-z-flip", label: "Flip", name: "Galaxy Z Flip", width: 426, height: 1011 },
   { id: "iphone-se", label: "iOS Small", name: "iPhone SE", width: 375, height: 667 },
   { id: "iphone-pro", label: "iOS Tall", name: "iPhone 15 / 16 Pro 계열", width: 393, height: 852 },
   { id: "android-large", label: "Android Large", name: "Pixel / Galaxy Ultra 계열", width: 412, height: 915 },
