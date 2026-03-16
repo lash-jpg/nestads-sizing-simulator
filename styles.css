@@ -1,13 +1,13 @@
 :root {
-  color-scheme: dark;
-  --bg-base: #0a0a0c;
-  --glass-bg: rgba(20, 20, 25, 0.45);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-shine: linear-gradient(120deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0) 70%);
-  --panel-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  color-scheme: light;
+  --bg-base: #ffffff;
+  --glass-bg: rgba(255, 255, 255, 0.82);
+  --glass-border: rgba(148, 163, 184, 0.22);
+  --glass-shine: linear-gradient(120deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.55) 50%, rgba(255, 255, 255, 0) 70%);
+  --panel-shadow: 0 22px 48px -28px rgba(15, 23, 42, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.7);
 
-  --text-main: #f4f4f5;
-  --text-muted: #a1a1aa;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
 
   --color-fixed: #22d3ee;
   --glow-fixed: rgba(34, 211, 238, 0.15);
@@ -21,9 +21,9 @@
   --glow-fill: rgba(251, 191, 36, 0.15);
   --bg-fill: rgba(251, 191, 36, 0.1);
 
-  --input-bg: rgba(0, 0, 0, 0.3);
-  --input-border: rgba(255, 255, 255, 0.12);
-  --input-focus: rgba(255, 255, 255, 0.3);
+  --input-bg: rgba(255, 255, 255, 0.96);
+  --input-border: rgba(148, 163, 184, 0.35);
+  --input-focus: rgba(59, 130, 246, 0.18);
 
   --radius-xl: 32px;
   --radius-lg: 24px;
@@ -63,7 +63,7 @@ body::after {
   border-radius: 50%;
   filter: blur(100px);
   z-index: -1;
-  opacity: 0.4;
+  opacity: 0.22;
   animation: float 20s infinite alternate ease-in-out;
 }
 
@@ -136,7 +136,7 @@ body::after {
   font-weight: 800;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  background: linear-gradient(90deg, #a1a1aa, #f4f4f5);
+  background: linear-gradient(90deg, #64748b, #0f172a);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -168,8 +168,8 @@ body::after {
 .rule-item {
   padding: 16px 18px;
   border-radius: var(--radius-lg);
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.18);
   transition: all var(--transition-fast);
   text-align: left;
   display: flex;
@@ -190,8 +190,8 @@ body::after {
   line-height: 1.55;
   padding: 12px 14px;
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(248, 250, 252, 0.96);
+  border: 1px solid rgba(148, 163, 184, 0.18);
   min-height: 72px;
 }
 
@@ -272,8 +272,8 @@ body::after {
   flex: 1;
   padding: 20px 24px;
   border-radius: var(--radius-lg);
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.18);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -357,7 +357,7 @@ body::after {
 
 .field select option,
 .preset-select-field select option {
-  background: #18181b;
+  background: #ffffff;
   color: var(--text-main);
   text-align: center;
 }
@@ -366,7 +366,7 @@ body::after {
 .field select:focus,
 .preset-select-field select:focus {
   border-color: var(--input-focus);
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
 }
 
 .mode-title-row strong {
@@ -376,7 +376,7 @@ body::after {
 
 .results-note {
   padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(245, 243, 255, 0.95);
   border-radius: var(--radius-md);
   border-left: 4px solid var(--color-fluid);
   margin-bottom: 18px;
@@ -394,9 +394,9 @@ body::after {
   position: relative;
   padding: 20px;
   border-radius: var(--radius-xl);
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: 0 18px 36px -28px rgba(15, 23, 42, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.7);
   transition: transform var(--transition-smooth), border-color var(--transition-fast);
 }
 
@@ -411,7 +411,7 @@ body::after {
   left: 0;
   right: 0;
   height: 3px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(148, 163, 184, 0.28);
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
@@ -422,7 +422,7 @@ body::after {
 
 .is-fixed:hover {
   border-color: rgba(34, 211, 238, 0.4);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(34, 211, 238, 0.1);
+  box-shadow: 0 22px 42px -24px rgba(15, 23, 42, 0.2), 0 0 28px rgba(34, 211, 238, 0.14);
 }
 
 .is-fluid::before {
@@ -432,7 +432,7 @@ body::after {
 
 .is-fluid:hover {
   border-color: rgba(192, 132, 252, 0.4);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(192, 132, 252, 0.1);
+  box-shadow: 0 22px 42px -24px rgba(15, 23, 42, 0.2), 0 0 28px rgba(192, 132, 252, 0.16);
 }
 
 .is-fill::before {
@@ -442,7 +442,7 @@ body::after {
 
 .is-fill:hover {
   border-color: rgba(251, 191, 36, 0.4);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(251, 191, 36, 0.1);
+  box-shadow: 0 22px 42px -24px rgba(15, 23, 42, 0.2), 0 0 28px rgba(251, 191, 36, 0.16);
 }
 
 .mode-topline {
@@ -460,8 +460,8 @@ body::after {
 .mode-highlight {
   padding: 14px;
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(248, 250, 252, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.18);
   margin-bottom: 20px;
   text-align: center;
 }
@@ -499,9 +499,9 @@ body::after {
 .phone-preview-shell {
   padding: 16px;
   border-radius: var(--radius-lg);
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: inset 0 4px 12px rgba(148, 163, 184, 0.18);
   margin-bottom: 20px;
 }
 
@@ -611,8 +611,8 @@ body::after {
 
 .metrics-list div {
   padding: 12px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(248, 250, 252, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.18);
   border-radius: var(--radius-md);
   text-align: center;
 }
